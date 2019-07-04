@@ -14,3 +14,4 @@ nb-configuration.xml
 *.jar 
 *.war 
 *.ear
+/SEP_EAT_Lab5/nbproject/private/
