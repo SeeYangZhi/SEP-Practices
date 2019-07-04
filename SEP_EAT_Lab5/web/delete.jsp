@@ -1,22 +1,22 @@
 <%-- 
-    Document   : processSearch
-    Created on : Jul 3, 2019, 11:27:42 AM
+    Document   : delete
+    Created on : 4 Jul, 2019, 10:00:52 PM
     Author     : yangz
 --%>
+
 <%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>process Search</title>
+        <title>delete</title>
     </head>
     <body>
-
         <%
-            String searchString = request.getParameter("searchString");
+            String ID = request.getParameter("id");
             String brand = "", model = "", functions = "";
-            int quantity = 0, ID = 0;
+            int quantity = 0;
             try {
                 // Step1: Load JDBC Driver
                 Class.forName("com.mysql.jdbc.Driver");
@@ -24,13 +24,10 @@
                 String connURL = "jdbc:mysql://localhost/onlineshop?user=root&password=12345";
                 // Step 3: Establish connection to URL
                 Connection conn = DriverManager.getConnection(connURL);
-                // Step 4: Create Statement object
-                String insertStr = "select * from inventory where functions LIKE ?";
+                String insertStr = "call onlineshop.delete_inventory(?)";
                 PreparedStatement pstmt = conn.prepareStatement(insertStr);
-                pstmt.setString(1, "%" + searchString + "%");
-                // Step 5: Execute SQL Command
+                pstmt.setString(1, ID);
                 ResultSet rs = pstmt.executeQuery();
-                // Step 6: Process Result
                 if (rs.next()) {
                     rs.beforeFirst();
         %>
@@ -44,7 +41,6 @@
             </tr>
             <%
                 while (rs.next()) {
-                    ID = rs.getInt("ID");
                     brand = rs.getString("brand");
                     model = rs.getString("model");
                     functions = rs.getString("functions");
@@ -73,11 +69,14 @@
                     conn.close();
                 } else {
                     conn.close();
-                    response.sendRedirect("search.jsp");
+                    response.sendRedirect("login.jsp");
                 }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         %>
+
+        <!--        <input name="back" value="back" type="button">-->
+
     </body>
 </html>
