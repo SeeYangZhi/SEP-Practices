@@ -55,6 +55,7 @@
                 <tr>
                     <td>Search Phone: </td>
                     <td><input type="text" name="searchString"></td>
+                    <td><input type="submit" name="search" value="Search"></td>
                 </tr>
             </table>
         </form>
