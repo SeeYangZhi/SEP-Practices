@@ -5,7 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% String ID = request.getParameter("id");%>
+<% String ID = request.getParameter("id");
+    String status = (String) session.getAttribute("LOGIN-STATUS");
+    if (status == null || status != null && !status.equals("YES")) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>

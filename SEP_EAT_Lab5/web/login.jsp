@@ -12,7 +12,7 @@
         <title>login</title>
     </head>
     <body>
-        <form action="search.jsp" method="post">
+        <form action="verifyuser.jsp" method="post">
             <table border="0">
                 <tr>
                     <td>

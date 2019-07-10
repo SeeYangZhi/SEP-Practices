@@ -16,6 +16,10 @@
         <%
             String ID = request.getParameter("id");
             String brand = "", model = "", functions = "";
+            String status = (String) session.getAttribute("LOGIN-STATUS");
+            if (status == null || status!=null && !status.equals("YES")) {
+                response.sendRedirect("login.jsp");
+            }
             int quantity = 0;
             try {
                 // Step1: Load JDBC Driver
