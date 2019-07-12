@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <body>
+        <form action= "Authenticate" method="post">
+            <table border="0" align="center">
+                <tr>
+                    <td>
+                        Username:
+                    </td>
+                    <td>            
+                        <input type="text" name="username" size="20" id="username"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Password:
+                    </td>
+                    <td>            
+                        <input type="text" name="password" size="20" id="password"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>            
+                        <input type="submit" name="submitBtn" value="Login" onclick="checkForm()"/>
+                    </td>
+                    <td>            
+                        <input type="reset" name="resetBtn" value="Reset"/>
+                    </td>
+                </tr>
+
+                <tr><td><div id="divMessage"></div></td></tr>
+            </table>
+        </form>    
+
+        <script language="javascript" type="text/javascript" >
+            function checkForm() {
+                var blnIsAllOkay = new Boolean(true);
+                var objFullNameTextBox = new Object();
+                var objPassword = new Object();
+                var objMessageBox = new Object();
+                var strStudentName = new String("");
+                var strPassword = new String("");
+                var strMessageToUser = new String("");
+                //Set the objMessageBox to represent the divMessage element
+                objMessageBox = document.getElementById("divMessage");
+                //Set the objFullNameTextBox to represent the txtFullName control.
+                objFullNameTextBox = document.getElementById("username");
+                objPassword = document.getElementById("password");
+                //Collect student name from the txtFullName control.
+                strStudentName = objFullNameTextBox.value;
+                strPassword = objPassword.value;
+                //If the strStudentName variable contain empty string....
+                if (strStudentName == "" || strPassword == "") {
+                    //Accumulate the validation problem message for the user.
+                    strMessageToUser += "Please indicate student name.<br>";
+                    //There is validation problem, so blnIsAllOkay must contain false.
+                    blnIsAllOkay = false;
+                }
+                if (blnIsAllOkay == false) {
+                    objMessageBox.innerHTML = strMessageToUser;
+                    return false; //tell the browser you cannot send the data.
+                } else {
+                    return true; //tell the browser you can proceed to send data.
+                }
+            }//end of checkForm() function
+        </script>
+
+    </body>
+</html>

@@ -15,3 +15,5 @@ nb-configuration.xml
 *.war 
 *.ear 
 
+/Lab7/nbproject/private/
+/SEP_EAT_Lab7/nbproject/private/
