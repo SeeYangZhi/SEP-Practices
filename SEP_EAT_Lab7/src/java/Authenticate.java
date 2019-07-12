@@ -32,17 +32,16 @@ public class Authenticate extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         PrintWriter out = response.getWriter();
         String userid = request.getParameter("username");
         String password = request.getParameter("password");
         String id = "", pw = "";
-        out.println("<b>Username is:" + userid + "</b>");
-        out.close();
         try {
             // Step1: Load JDBC Driver
             Class.forName("com.mysql.jdbc.Driver");
             // Step 2: Define Connection URL
-            String connURL = "jdbc:mysql://localhost/school?user=root&password=12345";
+            String connURL = "jdbc:mysql://localhost/onlineshop?user=root&password=12345";
             // Step 3: Establish connection to URL
             Connection conn = DriverManager.getConnection(connURL);
             // Step 4: Create Statement object
@@ -64,10 +63,11 @@ public class Authenticate extends HttpServlet {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+        
         if (userid.equals(id) && password.equals(pw)) {
             HttpSession session = request.getSession();
             session.setAttribute("user", "id");
-            response.sendRedirect("search.jsp");
+            response.sendRedirect("DisplayTimeTable");
         } else {
             response.sendRedirect("login.html");
         }

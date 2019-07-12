@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/DisplayTimeTable"})
 public class DisplayTimeTable extends HttpServlet {
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,6 +30,21 @@ public class DisplayTimeTable extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>DisplayTimeTable</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<table border='1' align=center>");
+        for (int i = 1; i <= 5; i++) {
+            out.println("<tr> <td width = 100 align = center>" + i + " x " + "5" + "</td>" + "<td width = 100 align = center>" + i * 5 + "</td></tr>");
+        }
+        out.println("</table>");
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
 
     }
 
