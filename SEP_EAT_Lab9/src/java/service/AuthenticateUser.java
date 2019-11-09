@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webservices;
+package service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
  *
  * @author yangz
  */
-@Path("verifyUser")
+@Path("webservice")
 public class AuthenticateUser {
 
     @Context
@@ -38,13 +38,13 @@ public class AuthenticateUser {
     }
 
     /**
-     * Retrieves representation of an instance of webservices.AuthenticateUser
+     * Retrieves representation of an instance of service.AuthenticateUser
      *
      * @return an instance of java.lang.String
      */
     @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public String getXml() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getJson() {
         //TODO return proper representation object
         throw new UnsupportedOperationException();
     }
@@ -55,8 +55,8 @@ public class AuthenticateUser {
      * @param content representation for the resource
      */
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void putJson(String content) {
     }
 
     @GET
@@ -95,5 +95,4 @@ public class AuthenticateUser {
             return Response.status(400).build();
         }
     }
-
 }

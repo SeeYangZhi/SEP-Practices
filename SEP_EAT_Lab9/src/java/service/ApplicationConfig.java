@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webservices;
+package service;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -12,7 +12,7 @@ import javax.ws.rs.core.Application;
  *
  * @author yangz
  */
-@javax.ws.rs.ApplicationPath("webservices")
+@javax.ws.rs.ApplicationPath("webresources")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -29,9 +29,8 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(webservices.AuthenticateUser.class);
-        resources.add(webservices.GenericResource.class);
-        resources.add(webservices.SearchInventoryResource.class);
+        resources.add(service.AuthenticateUser.class);
+        resources.add(service.search.class);
     }
     
 }

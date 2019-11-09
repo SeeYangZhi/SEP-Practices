@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package webservices;
+package service;
 
 import entity.Inventory;
 import java.sql.Connection;
@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
  *
  * @author yangz
  */
-@Path("getInventory")
+@Path("searchInventory")
 public class search {
 
     @Context
@@ -41,7 +41,7 @@ public class search {
     }
 
     /**
-     * Retrieves representation of an instance of webservices.search
+     * Retrieves representation of an instance of service.search
      *
      * @return an instance of java.lang.String
      */
@@ -63,14 +63,13 @@ public class search {
     }
 
     @GET
-    @Path("searchInventory")
+    @Path("search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchInventory(@QueryParam("searchString") String searchString) {
         int ID = 0, quantity = 0;
         String brand = "", model = "", functions = "";
         ArrayList<Inventory> inventoryList = null;
-        Inventory i = null;
 
         try {
             // Step1: Load JDBC Driver
@@ -83,6 +82,8 @@ public class search {
             PreparedStatement pstmt = conn.prepareStatement(insertStr);
             pstmt.setString(1, "%" + searchString + "%");
             ResultSet rs = pstmt.executeQuery();
+            Inventory i = null;
+            inventoryList = new ArrayList<Inventory>();
             while (rs.next()) {
                 ID = rs.getInt("ID");
                 quantity = rs.getInt("quantity");
@@ -92,7 +93,6 @@ public class search {
                 i = new Inventory(ID, quantity, brand, model, functions);
                 inventoryList.add(i);
             }
-            conn.close();
 
             GenericEntity<ArrayList<Inventory>> entity = new GenericEntity<ArrayList<Inventory>>(inventoryList) {
             };
@@ -101,43 +101,5 @@ public class search {
             System.out.println(ex);
         }
         return Response.status(400).build();
-    }
-
-    @GET
-    @Path("verifyUser")
-    @Consumes("application/json")
-    @Produces("application/json")
-    public Response verifyUser(@QueryParam("userid") String userid, @QueryParam("password") String password) {
-        Connection conn = null;
-        String id = "", pw = "";
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String connURL = "jdbc:mysql://localhost/onlineshop?user=root&password=12345";
-            conn = DriverManager.getConnection(connURL);
-            String insertStr = "select * from login where userid = ? AND password = ?";
-            PreparedStatement pstmt = conn.prepareStatement(insertStr);
-            pstmt.setString(1, userid);
-            pstmt.setString(2, password);
-            // Step 5: Execute SQL Command
-            ResultSet rs = pstmt.executeQuery();
-            // Step 6: Process Result
-            while (rs.next()) {
-                id = userid;
-                pw = password;
-            }
-            // Step 7: Close connection
-            conn.close();
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return Response.status(400).build();
-        }
-
-        if (userid.equals(id) && password.equals(pw)) {
-            return Response.status(200).build();
-        } else {
-            return Response.status(400).build();
-        }
     }
 }
