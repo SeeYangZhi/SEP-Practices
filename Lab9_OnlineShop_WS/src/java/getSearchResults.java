@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import entity.Car;
+import entity.Inventory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import javax.ws.rs.core.Response;
  *
  * @author yangz
  */
-@WebServlet(urlPatterns = {"/getCarServlet"})
-public class getCarServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/getInventory"})
+public class getSearchResults extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,25 +41,30 @@ public class getCarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
         try (PrintWriter out = response.getWriter()) {
-            String brand = request.getParameter("brand");
-            Client client = ClientBuilder.newClient();
-            WebTarget target = client
-                    .target("http://localhost:8080/CalculatorWS/webresources/getCar")
-                    .path("getCar")
-                    .queryParam("brand", brand);
-            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-            Response res = invocationBuilder.get();
-
-            ArrayList<Car> cl = res.readEntity(new GenericType<ArrayList<Car>>() {
-            });
-            session.setAttribute("Car", cl);
-            RequestDispatcher rd = request.getRequestDispatcher("displayCar.jsp");
-            rd.forward(request, response);
+            /* TODO output your page here. You may use following sample code. */
+            String searchString = request.getParameter("searchString");
+            String brand = "", model = "", functions = "";
+            String status = (String) session.getAttribute("LOGIN-STATUS");
+            if (status == "NO") {
+                response.sendRedirect("login.html");
+            } else {
+                Client client = ClientBuilder.newClient();
+                WebTarget target = client
+                        .target("http://localhost:8080/Lab9_OnlineShop_WS/webservices/getInventory")
+                        .path("searchInventory")
+                        .queryParam("searchString", searchString);
+                Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+                Response res = invocationBuilder.get();
+                ArrayList<Inventory> inventory = res.readEntity(new GenericType<ArrayList<Inventory>>() {
+                });
+                session.setAttribute("inventory", inventory);
+                RequestDispatcher rd = request.getRequestDispatcher("displayInventory.jsp");
+                rd.forward(request, response);
+            }
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

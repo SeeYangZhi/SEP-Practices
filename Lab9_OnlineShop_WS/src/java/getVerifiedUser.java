@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-import entity.Car;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ import javax.ws.rs.core.Response;
  *
  * @author yangz
  */
-@WebServlet(urlPatterns = {"/getCarServlet"})
-public class getCarServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/getVerifiedUser"})
+public class getVerifiedUser extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,22 +43,24 @@ public class getCarServlet extends HttpServlet {
         HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String brand = request.getParameter("brand");
+            String user = request.getParameter("username");
+            String password = request.getParameter("password");
             Client client = ClientBuilder.newClient();
             WebTarget target = client
-                    .target("http://localhost:8080/CalculatorWS/webresources/getCar")
-                    .path("getCar")
-                    .queryParam("brand", brand);
+                    .target("http://localhost:8080/Lab9_OnlineShop_WS/webservices/AuthenticateUser")
+                    .path("verifyUser")
+                    .queryParam("userid", user)
+                    .queryParam("password", password);
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             Response res = invocationBuilder.get();
-
-            ArrayList<Car> cl = res.readEntity(new GenericType<ArrayList<Car>>() {
-            });
-            session.setAttribute("Car", cl);
-            RequestDispatcher rd = request.getRequestDispatcher("displayCar.jsp");
+            if (res.getStatus() == 200) {
+                session.setAttribute("LOGIN-STATUS", "YES");
+            } else {
+                session.setAttribute("LOGIN-STATUS", "NO");
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
             rd.forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
