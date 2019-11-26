@@ -5,6 +5,7 @@
  */
 package service;
 
+import entity.user;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -64,6 +66,7 @@ public class AuthenticateUser {
     @Consumes("application/json")
     public Response verifyUser(@QueryParam("userid") String userid, @QueryParam("password") String password) {
         Connection conn = null;
+        user user = null;
         String id = "", pw = "";
 
         try {
@@ -78,21 +81,22 @@ public class AuthenticateUser {
             ResultSet rs = pstmt.executeQuery();
             // Step 6: Process Result
             while (rs.next()) {
-                id = rs.getString("userid");
-                pw = rs.getString("password");
+                user = new user();
+                user.setId(rs.getString("userid"));
+                user.setPw(rs.getString("password"));
             }
             // Step 7: Close connection
-            conn.close();
-
+            GenericEntity<user> entity = new GenericEntity<user>(user) {
+            };
+            return Response.status(200).entity(entity).build();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return Response.status(400).build();
-        }
-
-        if (userid.equals(id) && password.equals(pw)) {
-            return Response.status(200).build();
-        } else {
-            return Response.status(400).build();
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception ex) {
+            }
         }
     }
 }

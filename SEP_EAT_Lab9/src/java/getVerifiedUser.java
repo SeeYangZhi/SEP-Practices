@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import entity.Inventory;
+import entity.user;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -53,14 +55,16 @@ public class getVerifiedUser extends HttpServlet {
                     .queryParam("password", password);
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             Response res = invocationBuilder.get();
-            if (res.getStatus() == 200) {
-                session.setAttribute("LOGIN-STATUS", "YES");
-                RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
-                rd.forward(request, response);
-            } else {
-                session.setAttribute("LOGIN-STATUS", "NO");
-                response.sendRedirect("login.html");
-            }
+            user userObj = res.readEntity(new GenericType<user>() {
+            });
+            session.setAttribute("user", userObj);
+            if (userObj.getId() == user && userObj.getPw() == password) {
+                session.setAttribute("LOGIN-STATUS", "yes");
+            } 
+            RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
+            rd.forward(request, response);
+        } catch(Exception ex){
+            response.sendRedirect("login.html");
         }
     }
 
