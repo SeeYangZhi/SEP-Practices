@@ -1,0 +1,1 @@
+## This repository contains practices I have done in school for JSP.
